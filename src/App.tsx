@@ -3,17 +3,24 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Layout } from "./components/Layout";
 import { StandbyScreen } from "./components/screens/StandbyScreen";
 import { ActivePackingScreen } from "./components/screens/ActivePackingScreen";
 import { ExceptionReportingModal } from "./components/modals/ExceptionReportingModal";
 import { Screen, LineItem, ExceptionType, Order } from "./types";
 import { INITIAL_ORDER } from "./constants";
+import { getSession } from "./api/mockClient";
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("standby");
   const [order, setOrder] = useState<Order>(INITIAL_ORDER);
+
+  useEffect(() => {
+    getSession().then((session) => {
+      console.log("Active terminal session:", session);
+    });
+  }, []);
   const [exceptionItem, setExceptionItem] = useState<LineItem | null>(null);
   const [isExceptionModalOpen, setIsExceptionModalOpen] = useState(false);
 
