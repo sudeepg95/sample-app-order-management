@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { AlertTriangle, X, Check, Flag } from "lucide-react";
 import { LineItem, ExceptionType } from "../../types";
+import { formatBinLocation } from "../../utils/formatters";
 
 interface ExceptionReportingModalProps {
   item: LineItem | null;
@@ -18,7 +19,7 @@ export const ExceptionReportingModal: React.FC<
 
   if (!item) return null;
 
-  const binLocation = `Z:${item.location.zone} A:${item.location.aisle} S:${item.location.shelf} B:${item.location.bin}`;
+  const binLocation = formatBinLocation(item.location);
 
   const issueTypes: ExceptionType[] = [
     "MISSING",
