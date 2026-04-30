@@ -17,7 +17,7 @@ import { useOrderWorkflow } from "./hooks/useOrderWorkflow";
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("standby");
   const [order, setOrder] = useState<Order>(INITIAL_ORDER);
-  const { isFetching, order: fetchedOrder, fetchOrder } = useOrderWorkflow();
+  const { isFetching, order: fetchedOrder, fetchOrder, packItem, submitException, dispatchExceptionOrder } = useOrderWorkflow();
 
   useEffect(() => {
     void getSession();
@@ -38,7 +38,10 @@ export default function App() {
     void fetchOrder();
   };
 
-  const handleScanItem = (id: string) => {
+  const handleScanItem = async (id: string) => {
+    const success = await packItem(order.id, id);
+    if (!success) return; // Prevent updating UI if the API call was skipped or failed
+
     setOrder((prev) => {
       const itemIndex = prev.items.findIndex((item) => item.id === id);
       if (itemIndex === -1) return prev;
@@ -63,19 +66,41 @@ export default function App() {
     setIsExceptionModalOpen(true);
   };
 
-  const handleExceptionSubmit = (_data: {
+  const handleExceptionSubmit = async (data: {
     type: ExceptionType;
     notes: string;
   }) => {
-    // console.log("Exception Submitted:", { item: exceptionItem, ...data });
+    if (!exceptionItem) return;
+    await submitException(order.id, exceptionItem.id, data.type, data.notes);
+    setOrder((prev) => {
+      const itemIndex = prev.items.findIndex((item) => item.id === exceptionItem.id);
+      if (itemIndex === -1) return prev;
+
+      const item = prev.items[itemIndex];
+      const updatedItems = [...prev.items];
+      updatedItems[itemIndex] = {
+        ...item,
+        hasException: true,
+      };
+
+      return { ...prev, items: updatedItems };
+    });
     setIsExceptionModalOpen(false);
-    // In a real app, this would alert a supervisor and maybe remove the item
+    setExceptionItem(null);
+  };
+
+  const handleDispatch = async () => {
+    const hasExceptions = order.items.some((i) => i.hasException);
+    if (hasExceptions) {
+      await dispatchExceptionOrder(order.id);
+    }
+    setCurrentScreen("dispatch");
   };
 
   return (
     <Layout>
       {currentScreen === "standby" && (
-        <StandbyScreen onFetchOrder={handleFetchOrder} isLoading={isFetching} />
+        <StandbyScreen onFetchOrder={handleFetchOrder} />
       )}
 
       {currentScreen === "loading" && <LoadingScreen />}
@@ -85,7 +110,7 @@ export default function App() {
           order={order}
           onScanItem={handleScanItem}
           onReportException={handleReportOpening}
-          onDispatch={() => setCurrentScreen("dispatch")}
+          onDispatch={handleDispatch}
         />
       )}
 
