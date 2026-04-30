@@ -17,9 +17,7 @@ export default function App() {
   const [order, setOrder] = useState<Order>(INITIAL_ORDER);
 
   useEffect(() => {
-    getSession().then((session) => {
-      console.log("Active terminal session:", session);
-    });
+    void getSession();
   }, []);
   const [exceptionItem, setExceptionItem] = useState<LineItem | null>(null);
   const [isExceptionModalOpen, setIsExceptionModalOpen] = useState(false);
