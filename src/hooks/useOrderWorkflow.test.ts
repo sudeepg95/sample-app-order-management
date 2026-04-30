@@ -43,6 +43,21 @@ describe("useOrderWorkflow", () => {
     expect(result.current.order).toEqual(fetchedOrder);
   });
 
+  it("resets isFetching to false and leaves order null when fetch rejects", async () => {
+    vi.spyOn(mockClient, "fetchNextOrder").mockRejectedValue(
+      new Error("network error"),
+    );
+
+    const { result } = renderHook(() => useOrderWorkflow());
+
+    await act(async () => {
+      await result.current.fetchOrder().catch(() => {});
+    });
+
+    expect(result.current.isFetching).toBe(false);
+    expect(result.current.order).toBeNull();
+  });
+
   it("prevents double-fetch when already fetching", async () => {
     let resolveFirst!: (o: typeof mockFetchedOrder) => void;
     const fetchSpy = vi

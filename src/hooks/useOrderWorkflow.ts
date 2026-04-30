@@ -9,9 +9,12 @@ export function useOrderWorkflow() {
   const fetchOrder = async () => {
     if (isFetching) return;
     setIsFetching(true);
-    const fetchedOrder = await fetchNextOrder();
-    setOrder(fetchedOrder);
-    setIsFetching(false);
+    try {
+      const fetchedOrder = await fetchNextOrder();
+      setOrder(fetchedOrder);
+    } finally {
+      setIsFetching(false);
+    }
   };
 
   return { isFetching, order, fetchOrder };
