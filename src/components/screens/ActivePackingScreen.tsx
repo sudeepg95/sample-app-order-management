@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { QrCode, AlertCircle, CheckCircle } from "lucide-react";
 import { Order } from "../../types";
+import { formatBinLocation } from "../../utils/formatters";
 
 interface ActivePackingScreenProps {
   order: Order;
@@ -15,9 +16,18 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
   onReportException,
   onDispatch,
 }) => {
-  const packedCount = useMemo(() => order.items.filter(i => i.isFullyPacked).length, [order.items]);
-  const isComplete = useMemo(() => packedCount === order.items.length, [packedCount, order.items.length]);
-  const progressPercent = useMemo(() => (packedCount / order.items.length) * 100, [packedCount, order.items.length]);
+  const packedCount = useMemo(
+    () => order.items.filter((i) => i.isFullyPacked).length,
+    [order.items],
+  );
+  const isComplete = useMemo(
+    () => packedCount === order.items.length,
+    [packedCount, order.items.length],
+  );
+  const progressPercent = useMemo(
+    () => (packedCount / order.items.length) * 100,
+    [packedCount, order.items.length],
+  );
 
   return (
     <div className="w-full max-w-6xl p-8 pt-0 flex flex-col gap-8 flex-1 mx-auto min-h-0 relative">
@@ -57,7 +67,7 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
       <div className="flex-1 overflow-y-auto min-h-0 pb-[172px] -mx-4 px-4 pt-4">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
           {order.items.map((item, index) => {
-            const binLocation = `Z:${item.location.zone} A:${item.location.aisle} S:${item.location.shelf} B:${item.location.bin}`;
+            const binLocation = formatBinLocation(item.location);
             return (
               <div
                 key={item.id}
