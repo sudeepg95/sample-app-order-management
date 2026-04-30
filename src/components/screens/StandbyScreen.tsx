@@ -1,12 +1,14 @@
-import React from 'react';
-import { Hourglass, ArrowRight } from 'lucide-react';
-import { STATION_ID } from '../../constants';
+import React from "react";
+import { Hourglass, ArrowRight } from "lucide-react";
+import { STATION_ID } from "../../constants";
 
 interface StandbyScreenProps {
   onFetchOrder: () => void;
 }
 
-export const StandbyScreen: React.FC<StandbyScreenProps> = ({ onFetchOrder }) => {
+export const StandbyScreen: React.FC<StandbyScreenProps> = ({
+  onFetchOrder,
+}) => {
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-8 relative">
       {/* Central Content Box */}
@@ -18,29 +20,42 @@ export const StandbyScreen: React.FC<StandbyScreenProps> = ({ onFetchOrder }) =>
 
         {/* Text Info */}
         <div className="text-center space-y-4">
-          <h1 className="font-headline text-7xl font-black uppercase text-pitch-black tracking-tight leading-none">AWAITING ASSIGNMENT</h1>
+          <h1 className="font-headline text-7xl font-black uppercase text-pitch-black tracking-tight leading-none">
+            AWAITING ASSIGNMENT
+          </h1>
           <p className="font-mono text-lg font-bold text-pitch-black/60 uppercase tracking-wide">
             {STATION_ID} IS READY. PLEASE INITIATE NEXT SEQUENCE.
           </p>
         </div>
 
         {/* Massive Action Button */}
-        <button 
+        <button
           onClick={onFetchOrder}
           className="w-[400px] h-[120px] bg-primary-yellow text-pitch-black border-4 border-pitch-black shadow-[8px_8px_0px_0px_#030712] flex flex-col items-center justify-center gap-2 hover:bg-yellow-300 active:translate-x-2 active:translate-y-2 active:shadow-none transition-none group relative overflow-hidden"
         >
           <div className="flex items-center gap-4 relative z-10">
-            <span className="font-headline text-5xl font-black uppercase tracking-tighter">FETCH NEXT ORDER</span>
-            <ArrowRight size={32} className="group-hover:translate-x-1 transition-none" />
+            <span className="font-headline text-5xl font-black uppercase tracking-tighter">
+              FETCH NEXT ORDER
+            </span>
+            <ArrowRight
+              size={32}
+              className="group-hover:translate-x-1 transition-none"
+            />
           </div>
-          
+
           {/* Dynamic Stripe background on button */}
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[repeating-linear-gradient(45deg,#000,#000_10px,transparent_10px,transparent_20px)]" />
         </button>
       </div>
 
       {/* Background Dots Grid */}
-      <div className="absolute -z-10 inset-0 pointer-events-none opacity-5 origin-center" style={{ backgroundImage: 'radial-gradient(#000 2px, transparent 2px)', backgroundSize: '32px 32px' }} />
+      <div
+        className="absolute -z-10 inset-0 pointer-events-none opacity-5 origin-center"
+        style={{
+          backgroundImage: "radial-gradient(#000 2px, transparent 2px)",
+          backgroundSize: "32px 32px",
+        }}
+      />
     </div>
   );
 };

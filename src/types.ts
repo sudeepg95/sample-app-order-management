@@ -1,4 +1,4 @@
-export type Screen = 'standby' | 'packing' | 'dispatch';
+export type Screen = "standby" | "packing" | "dispatch";
 
 export interface Location {
   zone: string;
@@ -26,9 +26,13 @@ export interface LineItem {
 
 export interface Order {
   id: string;
-  priority: 'STANDARD' | 'NEXT_DAY' | 'URGENT';
-  status: 'PACKING' | 'PACKED';
+  priority: "STANDARD" | "NEXT_DAY" | "URGENT";
+  status: "PACKING" | "PACKED";
   items: LineItem[];
 }
 
-export type ExceptionType = 'MISSING' | 'DAMAGED' | 'WRONG ITEM' | 'BARCODE UNREADABLE';
+export type ExceptionType =
+  | "MISSING"
+  | "DAMAGED"
+  | "WRONG ITEM"
+  | "BARCODE UNREADABLE";

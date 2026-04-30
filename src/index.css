@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700;800&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -6,11 +6,11 @@
   --font-body: "Inter", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  --color-primary-yellow: #FFEA00;
-  --color-industrial-gray: #E5E7EB;
+  --color-primary-yellow: #ffea00;
+  --color-industrial-gray: #e5e7eb;
   --color-pitch-black: #030712;
-  --color-alert-red: #E11D48;
-  --color-signal-green: #16A34A;
+  --color-alert-red: #e11d48;
+  --color-signal-green: #16a34a;
 
   --shadow-hard: 6px 6px 0px 0px #030712;
 }
@@ -30,7 +30,7 @@
   .shadow-hard {
     box-shadow: 6px 6px 0px 0px #030712;
   }
-  
+
   .shadow-hard-sm {
     box-shadow: 3px 3px 0px 0px #030712;
   }
@@ -48,4 +48,3 @@
 ::-webkit-scrollbar-thumb {
   @apply bg-pitch-black;
 }
-
