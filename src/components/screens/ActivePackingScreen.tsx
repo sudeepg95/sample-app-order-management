@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { QrCode, AlertCircle, CheckCircle } from "lucide-react";
 import { Order } from "../../types";
 
@@ -15,9 +15,9 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
   onReportException,
   onDispatch,
 }) => {
-  const packedCount = order.items.filter((i) => i.isFullyPacked).length;
-  const isComplete = packedCount === order.items.length;
-  const progressPercent = (packedCount / order.items.length) * 100;
+  const packedCount = useMemo(() => order.items.filter(i => i.isFullyPacked).length, [order.items]);
+  const isComplete = useMemo(() => packedCount === order.items.length, [packedCount, order.items.length]);
+  const progressPercent = useMemo(() => (packedCount / order.items.length) * 100, [packedCount, order.items.length]);
 
   return (
     <div className="w-full max-w-6xl p-8 pt-0 flex flex-col gap-8 flex-1 mx-auto min-h-0 relative">
