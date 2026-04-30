@@ -9,9 +9,17 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "oxlint .",
+    "lint:ci": "oxlint . --format=github",
     "lint:fix": "oxlint . --fix",
     "format": "oxfmt .",
-    "format:check": "oxfmt --check ."
+    "format:check": "oxfmt --check .",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "oxfmt",
+      "oxlint"
+    ]
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",
@@ -28,6 +36,8 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.21",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "oxfmt": "^0.47.0",
     "oxlint": "^1.62.0",
     "oxlint-tsgolint": "^0.22.1",

@@ -27,17 +27,19 @@ export default function App() {
 
   const handleScanItem = (id: string) => {
     setOrder((prev) => {
-      const updatedItems = prev.items.map((item) => {
-        if (item.id === id) {
-          const newQty = item.quantityPacked + 1;
-          return {
-            ...item,
-            quantityPacked: newQty,
-            isFullyPacked: newQty >= item.quantityRequired,
-          };
-        }
-        return item;
-      });
+      const itemIndex = prev.items.findIndex((item) => item.id === id);
+      if (itemIndex === -1) return prev;
+
+      const item = prev.items[itemIndex];
+      const newQty = item.quantityPacked + 1;
+
+      const updatedItems = [...prev.items];
+      updatedItems[itemIndex] = {
+        ...item,
+        quantityPacked: newQty,
+        isFullyPacked: newQty >= item.quantityRequired,
+      };
+
       return { ...prev, items: updatedItems };
     });
   };
@@ -48,11 +50,11 @@ export default function App() {
     setIsExceptionModalOpen(true);
   };
 
-  const handleExceptionSubmit = (data: {
+  const handleExceptionSubmit = (_data: {
     type: ExceptionType;
     notes: string;
   }) => {
-    console.log("Exception Submitted:", { item: exceptionItem, ...data });
+    // console.log("Exception Submitted:", { item: exceptionItem, ...data });
     setIsExceptionModalOpen(false);
     // In a real app, this would alert a supervisor and maybe remove the item
   };

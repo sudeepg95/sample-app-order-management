@@ -10,6 +10,13 @@ interface ExceptionReportingModalProps {
   onSubmit: (data: { type: ExceptionType; notes: string }) => void;
 }
 
+const issueTypes: ExceptionType[] = [
+  "MISSING",
+  "DAMAGED",
+  "WRONG ITEM",
+  "BARCODE UNREADABLE",
+];
+
 export const ExceptionReportingModal: React.FC<
   ExceptionReportingModalProps
 > = ({ item, isOpen, onClose, onSubmit }) => {
@@ -19,13 +26,6 @@ export const ExceptionReportingModal: React.FC<
   if (!item) return null;
 
   const binLocation = `Z:${item.location.zone} A:${item.location.aisle} S:${item.location.shelf} B:${item.location.bin}`;
-
-  const issueTypes: ExceptionType[] = [
-    "MISSING",
-    "DAMAGED",
-    "WRONG ITEM",
-    "BARCODE UNREADABLE",
-  ];
 
   return (
     <AnimatePresence>
