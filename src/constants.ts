@@ -2,6 +2,40 @@ import { Order } from "./types";
 
 export const STATION_ID = "STATION_04";
 
+export const PENDING_ORDER: Order = {
+  id: "ORD-5532",
+  priority: "NEXT_DAY",
+  status: "PENDING",
+  items: [
+    {
+      id: "item_4",
+      product: {
+        id: "p_4",
+        sku: "MN-USB-C-001",
+        name: "USB-C Hub 7-in-1",
+      },
+      location: { zone: "A", aisle: 1, shelf: "3", bin: 7 },
+      quantityRequired: 1,
+      quantityPacked: 0,
+      isFullyPacked: false,
+      weight: "0.3KG",
+    },
+    {
+      id: "item_5",
+      product: {
+        id: "p_5",
+        sku: "LP-STD-002",
+        name: "Laptop Stand Aluminium",
+      },
+      location: { zone: "B", aisle: 2, shelf: "1", bin: 3 },
+      quantityRequired: 1,
+      quantityPacked: 0,
+      isFullyPacked: false,
+      weight: "0.8KG",
+    },
+  ],
+};
+
 export const INITIAL_ORDER: Order = {
   id: "ORD-5531",
   priority: "URGENT",

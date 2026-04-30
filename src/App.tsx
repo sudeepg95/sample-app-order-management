@@ -6,28 +6,36 @@
 import { useState, useEffect } from "react";
 import { Layout } from "./components/Layout";
 import { StandbyScreen } from "./components/screens/StandbyScreen";
+import { LoadingScreen } from "./components/screens/LoadingScreen";
 import { ActivePackingScreen } from "./components/screens/ActivePackingScreen";
 import { ExceptionReportingModal } from "./components/modals/ExceptionReportingModal";
 import { Screen, LineItem, ExceptionType, Order } from "./types";
 import { INITIAL_ORDER } from "./constants";
 import { getSession } from "./api/mockClient";
+import { useOrderWorkflow } from "./hooks/useOrderWorkflow";
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("standby");
   const [order, setOrder] = useState<Order>(INITIAL_ORDER);
+  const { isFetching, order: fetchedOrder, fetchOrder } = useOrderWorkflow();
 
   useEffect(() => {
     void getSession();
   }, []);
+
+  useEffect(() => {
+    if (!isFetching && fetchedOrder && currentScreen === "loading") {
+      setOrder(fetchedOrder);
+      setCurrentScreen("packing");
+    }
+  }, [isFetching, fetchedOrder, currentScreen]);
+
   const [exceptionItem, setExceptionItem] = useState<LineItem | null>(null);
   const [isExceptionModalOpen, setIsExceptionModalOpen] = useState(false);
 
   const handleFetchOrder = () => {
-    // Reset items for a fresh "order"
-    setOrder({
-      ...INITIAL_ORDER,
-    });
-    setCurrentScreen("packing");
+    setCurrentScreen("loading");
+    void fetchOrder();
   };
 
   const handleScanItem = (id: string) => {
@@ -67,8 +75,10 @@ export default function App() {
   return (
     <Layout>
       {currentScreen === "standby" && (
-        <StandbyScreen onFetchOrder={handleFetchOrder} />
+        <StandbyScreen onFetchOrder={handleFetchOrder} isLoading={isFetching} />
       )}
+
+      {currentScreen === "loading" && <LoadingScreen />}
 
       {currentScreen === "packing" && (
         <ActivePackingScreen
