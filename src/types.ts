@@ -1,4 +1,4 @@
-export type Screen = "standby" | "packing" | "dispatch";
+export type Screen = "standby" | "loading" | "packing" | "dispatch";
 
 export interface Location {
   zone: string;
@@ -27,7 +27,7 @@ export interface LineItem {
 export interface Order {
   id: string;
   priority: "STANDARD" | "NEXT_DAY" | "URGENT";
-  status: "PACKING" | "PACKED";
+  status: "PENDING" | "PACKING" | "PACKED";
   items: LineItem[];
 }
 
