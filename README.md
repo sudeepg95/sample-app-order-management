@@ -1,11 +1,4 @@
-## :warning: Please read these instructions carefully and entirely first
-
-- Clone this repository to your local machine.
-- Use your IDE of choice to complete the assignment.
-- When you have completed the assignment, you need to push your code to this repository and [mark the assignment as completed by clicking here](https://app.snapcode.review/submission_links/be8053a8-c22f-4590-bf9a-6b220ec704b4).
-- Once you mark it as completed, your access to this repository will be revoked. Please make sure that you have completed the assignment and pushed all code from your local machine to this repository before you click the link.
-
-## The EE Challenge: Dispatch & Deliver
+## The Order Management App: Dispatch & Deliver
 
 **Welcome!** This challenge is your opportunity to show us not just what you can deliver, but also how you go about it.
 
@@ -41,7 +34,3 @@ We aren't looking for a "finished" product; we want to see a production-quality 
    What did you decide not to build and why?
    Why did you choose this specific tech stack?
    If you had more time, what would you do next?
-
-### Feedback
-
-Once you have completed the task please give brief feedback in `interview-feedback.md`.

@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-headline: "Barlow Condensed", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-primary-yellow: #FFEA00;
+  --color-industrial-gray: #E5E7EB;
+  --color-pitch-black: #030712;
+  --color-alert-red: #E11D48;
+  --color-signal-green: #16A34A;
+
+  --shadow-hard: 6px 6px 0px 0px #030712;
+}
+
+@layer base {
+  body {
+    @apply bg-industrial-gray text-pitch-black font-body antialiased selection:bg-primary-yellow selection:text-pitch-black;
+  }
+
+  /* Structural Beam - all borders are 4px unless otherwise noted */
+  .border-beam {
+    @apply border-4 border-pitch-black;
+  }
+}
+
+@layer utilities {
+  .shadow-hard {
+    box-shadow: 6px 6px 0px 0px #030712;
+  }
+  
+  .shadow-hard-sm {
+    box-shadow: 3px 3px 0px 0px #030712;
+  }
+}
+
+/* Scrollbar styling for industrial feel */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-industrial-gray border-l border-pitch-black;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-pitch-black;
+}
+
