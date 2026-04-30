@@ -1,6 +1,6 @@
-import React from 'react';
-import { QrCode, AlertCircle, CheckCircle } from 'lucide-react';
-import { Order } from '../../types';
+import React from "react";
+import { QrCode, AlertCircle, CheckCircle } from "lucide-react";
+import { Order } from "../../types";
 
 interface ActivePackingScreenProps {
   order: Order;
@@ -13,9 +13,9 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
   order,
   onScanItem,
   onReportException,
-  onDispatch
+  onDispatch,
 }) => {
-  const packedCount = order.items.filter(i => i.isFullyPacked).length;
+  const packedCount = order.items.filter((i) => i.isFullyPacked).length;
   const isComplete = packedCount === order.items.length;
   const progressPercent = (packedCount / order.items.length) * 100;
 
@@ -27,17 +27,23 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
           <div className="inline-block bg-pitch-black text-primary-yellow font-mono font-bold text-sm px-4 py-1 mb-4 uppercase tracking-widest shadow-hard-sm">
             ORDER #{order.id}
           </div>
-          <h1 className="font-headline font-black text-6xl uppercase tracking-tighter leading-none">ACTIVE PACKING</h1>
+          <h1 className="font-headline font-black text-6xl uppercase tracking-tighter leading-none">
+            ACTIVE PACKING
+          </h1>
         </div>
 
         <div className="w-full lg:w-[400px] relative z-10">
           <div className="flex justify-between items-end mb-3">
-            <span className="font-mono font-black text-xs uppercase tracking-widest opacity-60">SYSTEM_PROGRESS</span>
-            <span className="font-mono font-black text-lg">{packedCount} / {order.items.length} ITEMS</span>
+            <span className="font-mono font-black text-xs uppercase tracking-widest opacity-60">
+              SYSTEM_PROGRESS
+            </span>
+            <span className="font-mono font-black text-lg">
+              {packedCount} / {order.items.length} ITEMS
+            </span>
           </div>
           <div className="h-8 w-full border-4 border-pitch-black bg-industrial-gray relative">
             <div
-              className={`absolute top-0 left-0 h-full border-r-4 border-pitch-black ${isComplete ? 'bg-signal-green animate-pulse' : 'bg-primary-yellow'}`}
+              className={`absolute top-0 left-0 h-full border-r-4 border-pitch-black ${isComplete ? "bg-signal-green animate-pulse" : "bg-primary-yellow"}`}
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -57,33 +63,42 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
                 key={item.id}
                 className={`
               border-4 border-pitch-black shadow-hard flex flex-col relative group transition-none
-              ${item.isFullyPacked ? 'bg-green-100' : 'bg-white'}
+              ${item.isFullyPacked ? "bg-green-100" : "bg-white"}
             `}
               >
-                <div className={`
+                <div
+                  className={`
               absolute -top-4 -left-4 border-4 border-pitch-black px-4 py-1 z-10 shadow-hard-sm transition-none
-              ${item.isFullyPacked ? 'bg-signal-green text-white' : 'bg-primary-yellow text-pitch-black'}
-            `}>
+              ${item.isFullyPacked ? "bg-signal-green text-white" : "bg-primary-yellow text-pitch-black"}
+            `}
+                >
                   <span className="font-mono font-black text-xs uppercase">
-                    {item.isFullyPacked ? `ITEM 0${index + 1} - PACKED` : `ITEM 0${index + 1}`}
+                    {item.isFullyPacked
+                      ? `ITEM 0${index + 1} - PACKED`
+                      : `ITEM 0${index + 1}`}
                   </span>
                 </div>
 
                 <div className="flex flex-col md:flex-row h-full">
                   {/* Product Visual */}
-                  <div className={`w-full md:w-56 aspect-square border-b-4 md:border-b-0 md:border-r-4 border-pitch-black flex-shrink-0 p-6 flex items-center justify-center relative overflow-hidden transition-none ${item.isFullyPacked ? 'bg-green-50' : 'bg-industrial-gray'}`}>
+                  <div
+                    className={`w-full md:w-56 aspect-square border-b-4 md:border-b-0 md:border-r-4 border-pitch-black flex-shrink-0 p-6 flex items-center justify-center relative overflow-hidden transition-none ${item.isFullyPacked ? "bg-green-50" : "bg-industrial-gray"}`}
+                  >
                     <img
                       referrerPolicy="no-referrer"
                       src={item.product.image}
                       alt={item.product.name}
                       className={`
                     object-contain w-full h-full grayscale mix-blend-multiply transition-none
-                    ${item.isFullyPacked ? 'opacity-30 blur-[2px]' : 'opacity-90 contrast-125'}
+                    ${item.isFullyPacked ? "opacity-30 blur-[2px]" : "opacity-90 contrast-125"}
                   `}
                     />
                     {item.isFullyPacked && (
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <CheckCircle size={80} className="text-signal-green drop-shadow-[0_4px_10px_rgba(0,0,0,0.2)]" />
+                        <CheckCircle
+                          size={80}
+                          className="text-signal-green drop-shadow-[0_4px_10px_rgba(0,0,0,0.2)]"
+                        />
                       </div>
                     )}
                   </div>
@@ -91,27 +106,41 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
                   {/* Product Info */}
                   <div className="p-8 flex-1 flex flex-col">
                     <div className="mb-6">
-                      <h3 className={`font-headline font-bold text-4xl uppercase tracking-tight mb-1 transition-none ${item.isFullyPacked ? 'line-through opacity-40' : ''}`}>
+                      <h3
+                        className={`font-headline font-bold text-4xl uppercase tracking-tight mb-1 transition-none ${item.isFullyPacked ? "line-through opacity-40" : ""}`}
+                      >
                         {item.product.name}
                       </h3>
-                      <p className="font-mono font-black text-xl opacity-40">{item.product.sku}</p>
+                      <p className="font-mono font-black text-xl opacity-40">
+                        {item.product.sku}
+                      </p>
                     </div>
 
                     <div className="mt-auto space-y-4">
                       <div className="flex justify-between items-center font-mono text-xs opacity-60">
-                        <span>QTY: {item.quantityPacked} / {item.quantityRequired}</span>
+                        <span>
+                          QTY: {item.quantityPacked} / {item.quantityRequired}
+                        </span>
                         {item.weight && <span>WT: {item.weight}</span>}
                       </div>
 
                       {/* Bin Location */}
-                      <div className={`
+                      <div
+                        className={`
                     p-4 border-4 transition-none
-                    ${item.isFullyPacked
-                          ? 'bg-green-200 border-pitch-black/20 text-pitch-black/40'
-                          : 'bg-pitch-black text-primary-yellow border-primary-yellow shadow-hard-sm'}
-                  `}>
-                        <p className="font-mono text-[10px] mb-1 uppercase opacity-60">Bin Location</p>
-                        <p className="font-mono font-black text-2xl tracking-tighter whitespace-nowrap">{binLocation}</p>
+                    ${
+                      item.isFullyPacked
+                        ? "bg-green-200 border-pitch-black/20 text-pitch-black/40"
+                        : "bg-pitch-black text-primary-yellow border-primary-yellow shadow-hard-sm"
+                    }
+                  `}
+                      >
+                        <p className="font-mono text-[10px] mb-1 uppercase opacity-60">
+                          Bin Location
+                        </p>
+                        <p className="font-mono font-black text-2xl tracking-tighter whitespace-nowrap">
+                          {binLocation}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -125,7 +154,8 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
                       className="flex-1 bg-primary-yellow font-headline font-black text-2xl uppercase tracking-widest hover:bg-white active:bg-industrial-gray transition-none border-r-4 border-pitch-black flex items-center justify-center gap-3 active:translate-y-0.5"
                     >
                       <QrCode size={24} />
-                      SCAN / PACK {item.quantityPacked + 1} OF {item.quantityRequired}
+                      SCAN / PACK {item.quantityPacked + 1} OF{" "}
+                      {item.quantityRequired}
                     </button>
                     <button
                       onClick={() => onReportException(item.id)}
@@ -148,13 +178,13 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
       </div>
 
       {/* Persistence Floating Footer */}
-      <div
-        className="fixed bottom-0 left-0 right-0 p-8 bg-industrial-gray border-t-4 border-pitch-black z-20 flex justify-between items-stretch gap-4 transition-none"
-      >
+      <div className="fixed bottom-0 left-0 right-0 p-8 bg-industrial-gray border-t-4 border-pitch-black z-20 flex justify-between items-stretch gap-4 transition-none">
         <div className="bg-white border-4 border-pitch-black px-8 py-5 shadow-hard-sm hidden sm:flex items-center gap-4 transition-none flex-1">
-          <div className={`w-4 h-4 border-2 border-pitch-black rounded-none transition-none ${isComplete ? 'bg-signal-green animate-pulse' : 'bg-industrial-gray'}`} />
+          <div
+            className={`w-4 h-4 border-2 border-pitch-black rounded-none transition-none ${isComplete ? "bg-signal-green animate-pulse" : "bg-industrial-gray"}`}
+          />
           <span className="font-mono font-black text-xl uppercase tracking-tighter opacity-80">
-            {isComplete ? 'ALL ITEMS VERIFIED' : 'AWAITING BATCH COMPLETION...'}
+            {isComplete ? "ALL ITEMS VERIFIED" : "AWAITING BATCH COMPLETION..."}
           </span>
         </div>
 
@@ -163,9 +193,11 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
           onClick={onDispatch}
           className={`
             min-h-[5rem] py-5 px-12 border-4 border-pitch-black font-headline font-black text-3xl uppercase tracking-widest flex items-center justify-center gap-4 transition-none
-            ${isComplete
-              ? 'bg-signal-green text-white shadow-hard hover:bg-green-700 active:translate-x-1 active:translate-y-1 active:shadow-none'
-              : 'bg-white opacity-20 cursor-not-allowed'}
+            ${
+              isComplete
+                ? "bg-signal-green text-white shadow-hard hover:bg-green-700 active:translate-x-1 active:translate-y-1 active:shadow-none"
+                : "bg-white opacity-20 cursor-not-allowed"
+            }
           `}
         >
           <span>DISPATCH PARCEL</span>
