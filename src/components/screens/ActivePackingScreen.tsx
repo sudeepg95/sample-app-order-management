@@ -20,14 +20,35 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
     () => order.items.filter((i) => i.isFullyPacked).length,
     [order.items],
   );
+
+  const hasExceptions = useMemo(
+    () => order.items.some((i) => i.hasException),
+    [order.items]
+  );
+
   const isComplete = useMemo(
-    () => packedCount === order.items.length,
-    [packedCount, order.items.length],
+    () => order.items.every((i) => i.isFullyPacked || i.hasException),
+    [order.items],
   );
   const progressPercent = useMemo(
     () => (packedCount / order.items.length) * 100,
     [packedCount, order.items.length],
   );
+
+  const sortedItems = useMemo(() => {
+    return [...order.items].sort((a, b) => {
+      if (a.location.zone !== b.location.zone) {
+        return a.location.zone.localeCompare(b.location.zone);
+      }
+      if (a.location.aisle !== b.location.aisle) {
+        return a.location.aisle - b.location.aisle;
+      }
+      if (a.location.shelf !== b.location.shelf) {
+        return a.location.shelf.localeCompare(b.location.shelf);
+      }
+      return a.location.bin - b.location.bin;
+    });
+  }, [order.items]);
 
   return (
     <div className="w-full max-w-6xl p-8 pt-0 flex flex-col gap-8 flex-1 mx-auto min-h-0 relative">
@@ -66,33 +87,35 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
       {/* Items Grid */}
       <div className="flex-1 overflow-y-auto min-h-0 pb-[172px] -mx-4 px-4 pt-4">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
-          {order.items.map((item, index) => {
+          {sortedItems.map((item, index) => {
             const binLocation = formatBinLocation(item.location);
             return (
               <div
                 key={item.id}
                 className={`
               border-4 border-pitch-black shadow-hard flex flex-col relative group transition-none
-              ${item.isFullyPacked ? "bg-green-100" : "bg-white"}
+              ${item.hasException ? "bg-red-50" : item.isFullyPacked ? "bg-green-100" : "bg-white"}
             `}
               >
                 <div
                   className={`
               absolute -top-4 -left-4 border-4 border-pitch-black px-4 py-1 z-10 shadow-hard-sm transition-none
-              ${item.isFullyPacked ? "bg-signal-green text-white" : "bg-primary-yellow text-pitch-black"}
+              ${item.hasException ? "bg-alert-red text-white" : item.isFullyPacked ? "bg-signal-green text-white" : "bg-primary-yellow text-pitch-black"}
             `}
                 >
                   <span className="font-mono font-black text-xs uppercase">
-                    {item.isFullyPacked
-                      ? `ITEM 0${index + 1} - PACKED`
-                      : `ITEM 0${index + 1}`}
+                    {item.hasException
+                      ? `ITEM 0${index + 1} - EXCEPTION`
+                      : item.isFullyPacked
+                        ? `ITEM 0${index + 1} - PACKED`
+                        : `ITEM 0${index + 1}`}
                   </span>
                 </div>
 
                 <div className="flex flex-col md:flex-row h-full">
                   {/* Product Visual */}
                   <div
-                    className={`w-full md:w-56 aspect-square border-b-4 md:border-b-0 md:border-r-4 border-pitch-black flex-shrink-0 p-6 flex items-center justify-center relative overflow-hidden transition-none ${item.isFullyPacked ? "bg-green-50" : "bg-industrial-gray"}`}
+                    className={`w-full md:w-56 aspect-square border-b-4 md:border-b-0 md:border-r-4 border-pitch-black flex-shrink-0 p-6 flex items-center justify-center relative overflow-hidden transition-none ${item.hasException ? "bg-red-100" : item.isFullyPacked ? "bg-green-50" : "bg-industrial-gray"}`}
                   >
                     <img
                       referrerPolicy="no-referrer"
@@ -157,7 +180,13 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
                 </div>
 
                 {/* User Interaction Layer */}
-                {!item.isFullyPacked ? (
+                {item.hasException ? (
+                  <div className="border-t-4 border-pitch-black h-16 flex items-center justify-center bg-alert-red px-8 transition-none">
+                    <span className="font-headline font-black text-2xl text-white uppercase tracking-widest flex items-center gap-2">
+                      EXCEPTION REPORTED <AlertCircle size={24} />
+                    </span>
+                  </div>
+                ) : !item.isFullyPacked ? (
                   <div className="border-t-4 border-pitch-black flex h-16">
                     <button
                       onClick={() => onScanItem(item.id)}
@@ -205,13 +234,15 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
             min-h-[5rem] py-5 px-12 border-4 border-pitch-black font-headline font-black text-3xl uppercase tracking-widest flex items-center justify-center gap-4 transition-none
             ${
               isComplete
-                ? "bg-signal-green text-white shadow-hard hover:bg-green-700 active:translate-x-1 active:translate-y-1 active:shadow-none"
+                ? hasExceptions
+                  ? "bg-alert-red text-white shadow-hard hover:bg-red-700 active:translate-x-1 active:translate-y-1 active:shadow-none"
+                  : "bg-signal-green text-white shadow-hard hover:bg-green-700 active:translate-x-1 active:translate-y-1 active:shadow-none"
                 : "bg-white opacity-20 cursor-not-allowed"
             }
           `}
         >
-          <span>DISPATCH PARCEL</span>
-          <CheckCircle size={32} />
+          <span>{hasExceptions ? "SEND TO EXCEPTION HANDLING" : "DISPATCH PARCEL"}</span>
+          {hasExceptions ? <AlertCircle size={32} /> : <CheckCircle size={32} />}
         </button>
       </div>
     </div>

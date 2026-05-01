@@ -22,6 +22,7 @@ export interface LineItem {
   quantityPacked: number;
   isFullyPacked: boolean;
   weight?: string;
+  hasException?: boolean;
 }
 
 export interface Order {

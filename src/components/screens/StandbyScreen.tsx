@@ -4,12 +4,10 @@ import { STATION_ID } from "../../constants";
 
 interface StandbyScreenProps {
   onFetchOrder: () => void;
-  isLoading?: boolean;
 }
 
 export const StandbyScreen: React.FC<StandbyScreenProps> = ({
   onFetchOrder,
-  isLoading = false,
 }) => {
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-8 relative">
@@ -33,8 +31,7 @@ export const StandbyScreen: React.FC<StandbyScreenProps> = ({
         {/* Massive Action Button */}
         <button
           onClick={onFetchOrder}
-          disabled={isLoading}
-          className="w-[400px] h-[120px] bg-primary-yellow text-pitch-black border-4 border-pitch-black shadow-[8px_8px_0px_0px_#030712] flex flex-col items-center justify-center gap-2 hover:bg-yellow-300 active:translate-x-2 active:translate-y-2 active:shadow-none transition-none group relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:active:translate-x-0 disabled:active:translate-y-0 disabled:active:shadow-[8px_8px_0px_0px_#030712]"
+          className="w-[400px] h-[120px] bg-primary-yellow text-pitch-black border-4 border-pitch-black shadow-[8px_8px_0px_0px_#030712] flex flex-col items-center justify-center gap-2 hover:bg-yellow-300 active:translate-x-2 active:translate-y-2 active:shadow-none transition-none group relative overflow-hidden"
         >
           <div className="flex items-center gap-4 relative z-10">
             <span className="font-headline text-5xl font-black uppercase tracking-tighter">

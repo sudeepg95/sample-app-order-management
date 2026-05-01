@@ -73,6 +73,9 @@ describe("App component", () => {
   });
 
   it("handleScanItem updates item quantity and correctly marks as fully packed", async () => {
+    vi.spyOn(mockClient, "packOrderItem").mockImplementation(async (orderId, itemId) => {
+      return { success: true, orderId, itemId };
+    });
     render(<App />);
 
     await clickFetchAndWait();
@@ -83,8 +86,10 @@ describe("App component", () => {
     });
     fireEvent.click(scan1of1Btns[0]);
 
-    const verifiedMatches = screen.getAllByText(/VERIFIED MATCH/i);
-    expect(verifiedMatches.length).toBe(1);
+    await waitFor(() => {
+      const verifiedMatches = screen.getAllByText(/VERIFIED MATCH/i);
+      expect(verifiedMatches.length).toBe(1);
+    });
   });
 
   it("handleReportOpening opens the exception modal and handleExceptionSubmit closes it", async () => {
@@ -111,23 +116,36 @@ describe("App component", () => {
   });
 
   it("completes full flow from fetch to dispatch to standby", async () => {
+    vi.spyOn(mockClient, "packOrderItem").mockImplementation(async (orderId, itemId) => {
+      return { success: true, orderId, itemId };
+    });
     render(<App />);
 
     await clickFetchAndWait();
 
     // Both fetched order items require 1 each — scan them
-    const scan1of1Btns = screen.getAllByRole("button", {
-      name: /SCAN \/ PACK 1 OF 1/i,
-    });
-    fireEvent.click(scan1of1Btns[0]);
-    fireEvent.click(
-      screen.getAllByRole("button", { name: /SCAN \/ PACK 1 OF 1/i })[0],
-    );
+    // Need to use waitFor to ensure the UI updates after each click before clicking the next,
+    // otherwise the second click might happen before `isPackingItem` lock clears.
+    for (let i = 0; i < mockFetchedOrder.items.length; i++) {
+        const scanBtn = screen.getAllByRole("button", {
+            name: /SCAN \/ PACK 1 OF 1/i,
+        })[0];
+        fireEvent.click(scanBtn);
+
+        await waitFor(() => {
+            const verifiedMatches = screen.getAllByText(/VERIFIED MATCH/i);
+            expect(verifiedMatches.length).toBe(i + 1);
+        });
+    }
 
     const dispatchBtn = screen.getByRole("button", {
       name: /DISPATCH PARCEL/i,
     });
-    expect(dispatchBtn).not.toBeDisabled();
+
+    await waitFor(() => {
+      expect(dispatchBtn).not.toBeDisabled();
+    });
+
     fireEvent.click(dispatchBtn);
 
     expect(screen.getByText(/DISPATCH READY/i)).toBeInTheDocument();
