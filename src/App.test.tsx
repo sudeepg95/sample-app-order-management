@@ -69,7 +69,7 @@ describe("App component", () => {
     const scanButtons = screen.getAllByRole("button", {
       name: /SCAN \/ PACK/i,
     });
-    expect(scanButtons.length).toBe(mockFetchedOrder.items.length);
+    expect(scanButtons.length).toBe(mockFetchedOrder.itemIds.length);
   });
 
   it("handleScanItem updates item quantity and correctly marks as fully packed", async () => {
@@ -169,6 +169,6 @@ describe("App component", () => {
   });
 
   it("INITIAL_ORDER items length is available (regression guard)", () => {
-    expect(INITIAL_ORDER.items.length).toBeGreaterThan(0);
+    expect(INITIAL_ORDER.itemIds.length).toBeGreaterThan(0);
   });
 });

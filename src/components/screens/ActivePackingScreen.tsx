@@ -17,16 +17,17 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
   onDispatch,
 }) => {
   const packedCount = useMemo(
-    () => order.items.filter((i) => i.isFullyPacked).length,
-    [order.items],
+    () =>
+      order.itemIds.filter((id) => order.items[id].isFullyPacked).length,
+    [order.itemIds, order.items],
   );
   const isComplete = useMemo(
-    () => packedCount === order.items.length,
-    [packedCount, order.items.length],
+    () => packedCount === order.itemIds.length,
+    [packedCount, order.itemIds.length],
   );
   const progressPercent = useMemo(
-    () => (packedCount / order.items.length) * 100,
-    [packedCount, order.items.length],
+    () => (packedCount / order.itemIds.length) * 100,
+    [packedCount, order.itemIds.length],
   );
 
   return (
@@ -48,7 +49,7 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
               SYSTEM_PROGRESS
             </span>
             <span className="font-mono font-black text-lg">
-              {packedCount} / {order.items.length} ITEMS
+              {packedCount} / {order.itemIds.length} ITEMS
             </span>
           </div>
           <div className="h-8 w-full border-4 border-pitch-black bg-industrial-gray relative">
@@ -66,7 +67,8 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
       {/* Items Grid */}
       <div className="flex-1 overflow-y-auto min-h-0 pb-[172px] -mx-4 px-4 pt-4">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
-          {order.items.map((item, index) => {
+          {order.itemIds.map((itemId, index) => {
+            const item = order.items[itemId];
             const binLocation = formatBinLocation(item.location);
             return (
               <div
