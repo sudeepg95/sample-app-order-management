@@ -40,25 +40,27 @@ export default function App() {
 
   const handleScanItem = (id: string) => {
     setOrder((prev) => {
-      const itemIndex = prev.items.findIndex((item) => item.id === id);
-      if (itemIndex === -1) return prev;
+      const item = prev.items[id];
+      if (!item) return prev;
 
-      const item = prev.items[itemIndex];
       const newQty = item.quantityPacked + 1;
 
-      const updatedItems = [...prev.items];
-      updatedItems[itemIndex] = {
-        ...item,
-        quantityPacked: newQty,
-        isFullyPacked: newQty >= item.quantityRequired,
+      return {
+        ...prev,
+        items: {
+          ...prev.items,
+          [id]: {
+            ...item,
+            quantityPacked: newQty,
+            isFullyPacked: newQty >= item.quantityRequired,
+          },
+        },
       };
-
-      return { ...prev, items: updatedItems };
     });
   };
 
   const handleReportOpening = (id: string) => {
-    const item = order.items.find((i) => i.id === id) || null;
+    const item = order.items[id] || null;
     setExceptionItem(item);
     setIsExceptionModalOpen(true);
   };

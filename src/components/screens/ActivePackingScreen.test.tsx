@@ -8,8 +8,8 @@ const mockOrder: Order = {
   id: "123",
   priority: "STANDARD",
   status: "PACKING",
-  items: [
-    {
+  items: {
+    item1: {
       id: "item1",
       product: { id: "p1", sku: "SKU1", name: "Product 1" },
       location: { zone: "A", aisle: 1, shelf: "B", bin: 1 },
@@ -17,7 +17,8 @@ const mockOrder: Order = {
       quantityPacked: 0,
       isFullyPacked: false,
     },
-  ],
+  },
+  itemIds: ["item1"],
 };
 
 describe("ActivePackingScreen", () => {
@@ -44,13 +45,13 @@ describe("ActivePackingScreen", () => {
   it("enables the dispatch button when all items are fully packed", () => {
     const fullyPackedOrder: Order = {
       ...mockOrder,
-      items: [
-        {
-          ...mockOrder.items[0],
+      items: {
+        item1: {
+          ...mockOrder.items["item1"],
           quantityPacked: 1,
           isFullyPacked: true,
         },
-      ],
+      },
     };
 
     render(
@@ -71,8 +72,8 @@ describe("ActivePackingScreen", () => {
   it("handles partially packed states (some items packed, some not)", () => {
     const partiallyPackedOrder: Order = {
       ...mockOrder,
-      items: [
-        {
+      items: {
+        item1: {
           id: "item1",
           product: { id: "p1", sku: "SKU1", name: "Product 1" },
           location: { zone: "A", aisle: 1, shelf: "B", bin: 1 },
@@ -80,7 +81,7 @@ describe("ActivePackingScreen", () => {
           quantityPacked: 1,
           isFullyPacked: true,
         },
-        {
+        item2: {
           id: "item2",
           product: { id: "p2", sku: "SKU2", name: "Product 2" },
           location: { zone: "A", aisle: 1, shelf: "B", bin: 2 },
@@ -88,7 +89,8 @@ describe("ActivePackingScreen", () => {
           quantityPacked: 0,
           isFullyPacked: false,
         },
-      ],
+      },
+      itemIds: ["item1", "item2"],
     };
 
     render(
@@ -109,7 +111,8 @@ describe("ActivePackingScreen", () => {
   it("is complete when there are zero items in the order", () => {
     const zeroItemOrder: Order = {
       ...mockOrder,
-      items: [],
+      items: {},
+      itemIds: [],
     };
 
     render(

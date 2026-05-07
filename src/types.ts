@@ -28,7 +28,8 @@ export interface Order {
   id: string;
   priority: "STANDARD" | "NEXT_DAY" | "URGENT";
   status: "PENDING" | "PACKING" | "PACKED";
-  items: LineItem[];
+  items: Record<string, LineItem>;
+  itemIds: string[];
 }
 
 export type ExceptionType =

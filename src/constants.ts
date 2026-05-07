@@ -6,8 +6,8 @@ export const PENDING_ORDER: Order = {
   id: "ORD-5532",
   priority: "NEXT_DAY",
   status: "PENDING",
-  items: [
-    {
+  items: {
+    item_4: {
       id: "item_4",
       product: {
         id: "p_4",
@@ -20,7 +20,7 @@ export const PENDING_ORDER: Order = {
       isFullyPacked: false,
       weight: "0.3KG",
     },
-    {
+    item_5: {
       id: "item_5",
       product: {
         id: "p_5",
@@ -33,15 +33,16 @@ export const PENDING_ORDER: Order = {
       isFullyPacked: false,
       weight: "0.8KG",
     },
-  ],
+  },
+  itemIds: ["item_4", "item_5"],
 };
 
 export const INITIAL_ORDER: Order = {
   id: "ORD-5531",
   priority: "URGENT",
   status: "PACKING",
-  items: [
-    {
+  items: {
+    item_1: {
       id: "item_1",
       product: {
         id: "p_1",
@@ -56,7 +57,7 @@ export const INITIAL_ORDER: Order = {
       isFullyPacked: false,
       weight: "0.2KG",
     },
-    {
+    item_2: {
       id: "item_2",
       product: {
         id: "p_2",
@@ -71,7 +72,7 @@ export const INITIAL_ORDER: Order = {
       isFullyPacked: false,
       weight: "1.1KG",
     },
-    {
+    item_3: {
       id: "item_3",
       product: {
         id: "p_3",
@@ -86,5 +87,6 @@ export const INITIAL_ORDER: Order = {
       isFullyPacked: false,
       weight: "0.3KG",
     },
-  ],
+  },
+  itemIds: ["item_1", "item_2", "item_3"],
 };
