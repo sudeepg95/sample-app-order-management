@@ -10,13 +10,13 @@ import { LoadingScreen } from "./components/screens/LoadingScreen";
 import { ActivePackingScreen } from "./components/screens/ActivePackingScreen";
 import { ExceptionReportingModal } from "./components/modals/ExceptionReportingModal";
 import { Screen, LineItem, ExceptionType, Order } from "./types";
-import { INITIAL_ORDER } from "./constants";
+import { generateOrder } from "./utils/orderGenerator";
 import { getSession } from "./api/mockClient";
 import { useOrderWorkflow } from "./hooks/useOrderWorkflow";
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("standby");
-  const [order, setOrder] = useState<Order>(INITIAL_ORDER);
+  const [order, setOrder] = useState<Order>(() => generateOrder("PACKING"));
   const { isFetching, order: fetchedOrder, fetchOrder } = useOrderWorkflow();
 
   useEffect(() => {

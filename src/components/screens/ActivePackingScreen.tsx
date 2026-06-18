@@ -18,8 +18,11 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
 }) => {
   const packedCount = useMemo(
     () =>
-      order.itemIds.filter((id) => order.items[id].isFullyPacked).length,
-    [order.itemIds, order.items],
+      Object.values(order.items).reduce(
+        (count, i) => count + (i.isFullyPacked ? 1 : 0),
+        0,
+      ),
+    [order.items],
   );
   const isComplete = useMemo(
     () => packedCount === order.itemIds.length,
@@ -70,121 +73,120 @@ export const ActivePackingScreen: React.FC<ActivePackingScreenProps> = ({
           {order.itemIds.map((itemId, index) => {
             const item = order.items[itemId];
             const binLocation = formatBinLocation(item.location);
-            return (
-              <div
-                key={item.id}
-                className={`
+      return (
+        <div
+          key={item.id}
+          className={`
               border-4 border-pitch-black shadow-hard flex flex-col relative group transition-none
               ${item.isFullyPacked ? "bg-green-100" : "bg-white"}
             `}
-              >
-                <div
-                  className={`
+        >
+          <div
+            className={`
               absolute -top-4 -left-4 border-4 border-pitch-black px-4 py-1 z-10 shadow-hard-sm transition-none
               ${item.isFullyPacked ? "bg-signal-green text-white" : "bg-primary-yellow text-pitch-black"}
             `}
-                >
-                  <span className="font-mono font-black text-xs uppercase">
-                    {item.isFullyPacked
-                      ? `ITEM 0${index + 1} - PACKED`
-                      : `ITEM 0${index + 1}`}
-                  </span>
-                </div>
+          >
+            <span className="font-mono font-black text-xs uppercase">
+              {item.isFullyPacked
+                ? `ITEM 0${index + 1} - PACKED`
+                : `ITEM 0${index + 1}`}
+            </span>
+          </div>
 
-                <div className="flex flex-col md:flex-row h-full">
-                  {/* Product Visual */}
-                  <div
-                    className={`w-full md:w-56 aspect-square border-b-4 md:border-b-0 md:border-r-4 border-pitch-black flex-shrink-0 p-6 flex items-center justify-center relative overflow-hidden transition-none ${item.isFullyPacked ? "bg-green-50" : "bg-industrial-gray"}`}
-                  >
-                    <img
-                      referrerPolicy="no-referrer"
-                      src={item.product.image}
-                      alt={item.product.name}
-                      className={`
+          <div className="flex flex-col md:flex-row h-full">
+            {/* Product Visual */}
+            <div
+              className={`w-full md:w-56 aspect-square border-b-4 md:border-b-0 md:border-r-4 border-pitch-black flex-shrink-0 p-6 flex items-center justify-center relative overflow-hidden transition-none ${item.isFullyPacked ? "bg-green-50" : "bg-industrial-gray"}`}
+            >
+              <img
+                referrerPolicy="no-referrer"
+                src={item.product.image}
+                alt={item.product.name}
+                className={`
                     object-contain w-full h-full grayscale mix-blend-multiply transition-none
                     ${item.isFullyPacked ? "opacity-30 blur-[2px]" : "opacity-90 contrast-125"}
                   `}
-                    />
-                    {item.isFullyPacked && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <CheckCircle
-                          size={80}
-                          className="text-signal-green drop-shadow-[0_4px_10px_rgba(0,0,0,0.2)]"
-                        />
-                      </div>
-                    )}
-                  </div>
+              />
+              {item.isFullyPacked && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <CheckCircle
+                    size={80}
+                    className="text-signal-green drop-shadow-[0_4px_10px_rgba(0,0,0,0.2)]"
+                  />
+                </div>
+              )}
+            </div>
 
-                  {/* Product Info */}
-                  <div className="p-8 flex-1 flex flex-col">
-                    <div className="mb-6">
-                      <h3
-                        className={`font-headline font-bold text-4xl uppercase tracking-tight mb-1 transition-none ${item.isFullyPacked ? "line-through opacity-40" : ""}`}
-                      >
-                        {item.product.name}
-                      </h3>
-                      <p className="font-mono font-black text-xl opacity-40">
-                        {item.product.sku}
-                      </p>
-                    </div>
+            {/* Product Info */}
+            <div className="p-8 flex-1 flex flex-col">
+              <div className="mb-6">
+                <h3
+                  className={`font-headline font-bold text-4xl uppercase tracking-tight mb-1 transition-none ${item.isFullyPacked ? "line-through opacity-40" : ""}`}
+                >
+                  {item.product.name}
+                </h3>
+                <p className="font-mono font-black text-xl opacity-40">
+                  {item.product.sku}
+                </p>
+              </div>
 
-                    <div className="mt-auto space-y-4">
-                      <div className="flex justify-between items-center font-mono text-xs opacity-60">
-                        <span>
-                          QTY: {item.quantityPacked} / {item.quantityRequired}
-                        </span>
-                        {item.weight && <span>WT: {item.weight}</span>}
-                      </div>
-
-                      {/* Bin Location */}
-                      <div
-                        className={`
-                    p-4 border-4 transition-none
-                    ${
-                      item.isFullyPacked
-                        ? "bg-green-200 border-pitch-black/20 text-pitch-black/40"
-                        : "bg-pitch-black text-primary-yellow border-primary-yellow shadow-hard-sm"
-                    }
-                  `}
-                      >
-                        <p className="font-mono text-[10px] mb-1 uppercase opacity-60">
-                          Bin Location
-                        </p>
-                        <p className="font-mono font-black text-2xl tracking-tighter whitespace-nowrap">
-                          {binLocation}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+              <div className="mt-auto space-y-4">
+                <div className="flex justify-between items-center font-mono text-xs opacity-60">
+                  <span>
+                    QTY: {item.quantityPacked} / {item.quantityRequired}
+                  </span>
+                  {item.weight && <span>WT: {item.weight}</span>}
                 </div>
 
-                {/* User Interaction Layer */}
-                {!item.isFullyPacked ? (
-                  <div className="border-t-4 border-pitch-black flex h-16">
-                    <button
-                      onClick={() => onScanItem(item.id)}
-                      className="flex-1 bg-primary-yellow font-headline font-black text-2xl uppercase tracking-widest hover:bg-white active:bg-industrial-gray transition-none border-r-4 border-pitch-black flex items-center justify-center gap-3 active:translate-y-0.5"
-                    >
-                      <QrCode size={24} />
-                      SCAN / PACK {item.quantityPacked + 1} OF{" "}
-                      {item.quantityRequired}
-                    </button>
-                    <button
-                      onClick={() => onReportException(item.id)}
-                      className="w-20 bg-alert-red flex items-center justify-center hover:bg-white hover:text-alert-red transition-none text-white active:translate-y-0.5"
-                    >
-                      <AlertCircle size={32} />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="border-t-4 border-pitch-black h-16 flex items-center justify-center bg-signal-green px-8 transition-none">
-                    <span className="font-headline font-black text-2xl text-white uppercase tracking-widest flex items-center gap-2">
-                      VERIFIED MATCH <CheckCircle size={24} />
-                    </span>
-                  </div>
-                )}
+                {/* Bin Location */}
+                <div
+                  className={`
+                    p-4 border-4 transition-none
+                    ${item.isFullyPacked
+                      ? "bg-green-200 border-pitch-black/20 text-pitch-black/40"
+                      : "bg-pitch-black text-primary-yellow border-primary-yellow shadow-hard-sm"
+                    }
+                  `}
+                >
+                  <p className="font-mono text-[10px] mb-1 uppercase opacity-60">
+                    Bin Location
+                  </p>
+                  <p className="font-mono font-black text-2xl tracking-tighter whitespace-nowrap">
+                    {binLocation}
+                  </p>
+                </div>
               </div>
-            );
+            </div>
+          </div>
+
+          {/* User Interaction Layer */}
+          {!item.isFullyPacked ? (
+            <div className="border-t-4 border-pitch-black flex h-16">
+              <button
+                onClick={() => onScanItem(item.id)}
+                className="flex-1 bg-primary-yellow font-headline font-black text-2xl uppercase tracking-widest hover:bg-white active:bg-industrial-gray transition-none border-r-4 border-pitch-black flex items-center justify-center gap-3 active:translate-y-0.5"
+              >
+                <QrCode size={24} />
+                SCAN / PACK {item.quantityPacked + 1} OF{" "}
+                {item.quantityRequired}
+              </button>
+              <button
+                onClick={() => onReportException(item.id)}
+                className="w-20 bg-alert-red flex items-center justify-center hover:bg-white hover:text-alert-red transition-none text-white active:translate-y-0.5"
+              >
+                <AlertCircle size={32} />
+              </button>
+            </div>
+          ) : (
+            <div className="border-t-4 border-pitch-black h-16 flex items-center justify-center bg-signal-green px-8 transition-none">
+              <span className="font-headline font-black text-2xl text-white uppercase tracking-widest flex items-center gap-2">
+                VERIFIED MATCH <CheckCircle size={24} />
+              </span>
+            </div>
+          )}
+        </div>
+      );
           })}
         </div>
       </div>
