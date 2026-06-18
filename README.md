@@ -34,3 +34,23 @@ We aren't looking for a "finished" product; we want to see a production-quality 
    What did you decide not to build and why?
    Why did you choose this specific tech stack?
    If you had more time, what would you do next?
+
+---
+
+## My Solution
+
+### Live Demo
+
+Deployed to GitHub Pages: [https://sudeepg95.github.io/sample-app-order-management/](https://sudeepg95.github.io/sample-app-order-management/)
+
+## Design System
+
+Full design spec: [`DESIGN.md`](./DESIGN.md)
+
+## Product Requirements
+
+Product requirements and user stories: [`markdown/prd.md`](./markdown/prd.md)
+
+UI screen specifications and state machine: [`markdown/ui-spec.md`](./markdown/ui-spec.md)
+
+Initial PRD and product overview: [`markdown/prd-doc-1.md`](./markdown/prd-doc-1.md)
